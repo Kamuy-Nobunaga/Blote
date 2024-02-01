@@ -1,7 +1,11 @@
 import { defineStore } from 'pinia';
 import { db, blogsRef } from '@/firebase';
 import { deleteDoc, getDocs, doc } from 'firebase/firestore';
+import { createPinia } from "pinia";
 
+const pinia = createPinia();
+
+export default pinia;
 
 export const useBlogStore = defineStore('blogStore', {
     state: () => ({

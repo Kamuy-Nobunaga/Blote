@@ -5,7 +5,7 @@
         <label for="content">Content</label>
         <textarea name="context" id="context" cols="50" rows="30" v-model="blogForm.content"></textarea>
 
-        <button>Update the blote</button>
+        <button>Update</button>
     </form>
 </template>
 <script setup>

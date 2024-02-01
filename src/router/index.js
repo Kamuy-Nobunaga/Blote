@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { useBlogStore } from '@/stores/BlogStore';
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/blotes',
+    name: 'blotes',
+    component: () => import('../views/BlotesView.vue'),
   },
   {
     path: '/sign-up',
@@ -35,3 +41,15 @@ const router = createRouter({
 })
 
 export default router
+
+router.beforeEach(to => {
+    const blogStore = useBlogStore()
+
+    // 登入頁（首頁）不用驗證
+    if (to.fullPath === '/') return;
+    
+    if (!blogStore.isLogin) {
+      return '/';
+    }
+  return true;
+});

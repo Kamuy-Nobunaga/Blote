@@ -1,13 +1,15 @@
 <template>
     <nav class='navbar'>
-        <router-link to="/">Blotes</router-link>
+        <router-link to="/blotes">Blotes</router-link>
         <button @click="userSignout">Logout</button>
     </nav>
 </template>
 <script setup>
     import { useBlogStore } from '@/stores/BlogStore';
     import { getAuth, signOut } from 'firebase/auth'
+    import { useRouter } from 'vue-router';
 
+    const router = useRouter()
     const auth = getAuth()
     const blogStore = useBlogStore()
 
@@ -16,6 +18,8 @@
         .then(() => {
             console.log('the user signed out');
             blogStore.isLogin = false
+            router.push({ name: 'home' })
+
         })
         .catch((err) => {
             console.log(err.message);

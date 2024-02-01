@@ -14,6 +14,7 @@
   import AddNote from '@/components/AddNote.vue';
   import SingleNote from '../components/SingleNote.vue';
   import AddBlog from '@/components/AddBlog.vue';
+
 </script>
 
 <style lang="scss" scoped>

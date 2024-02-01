@@ -18,8 +18,9 @@
     // import { storeToRefs } from 'pinia';
     import { useBlogStore } from '@/stores/BlogStore';
     import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+    import { useRouter } from 'vue-router';
 
-  
+    const router = useRouter()
     const blogStore = useBlogStore()
 
     const account = reactive({
@@ -33,6 +34,8 @@
         .then((cred) => {
             console.log('user logged in:', cred.user);
             blogStore.isLogin = true;
+            router.push({ name: 'blotes' })
+
         })
         .catch((err) => {
             console.log(err.message);

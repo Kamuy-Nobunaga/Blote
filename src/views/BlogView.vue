@@ -5,12 +5,13 @@
         </h1>
         <p>{{ blog.content }}</p>
     </div>
+
 </template>
 <script setup>
     import { onMounted, ref } from 'vue';
     import { doc, getDoc } from 'firebase/firestore';
     import { db } from '@/firebase';
-    import { useRoute } from 'vue-router';  
+    import { useRoute } from 'vue-router'; 
     
     const route = useRoute()
     const docRef = doc(db, 'blogs', route.params.id)
