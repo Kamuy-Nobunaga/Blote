@@ -45,7 +45,6 @@ export default router
 router.beforeEach(to => {
     const blogStore = useBlogStore()
 
-    // 登入頁（首頁）不用驗證
     if (to.fullPath === '/') return;
     
     if (!blogStore.isLogin) {

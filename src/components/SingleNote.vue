@@ -1,6 +1,6 @@
 <template>
     <div class="all-notes">
-        <div class="note" v-for="note in notes" :key="note.id">
+        <div class="note" v-for="note in noteWithCorrespondingTitle" :key="note.id">
             <h5>{{ note.title }}</h5>
             <p>{{ note.note }}</p>
 
@@ -17,12 +17,46 @@
     >Test</Vue3DraggableResizable> -->
 </template>
 <script setup>
-import { storeToRefs } from 'pinia';
-import { useNoteStore } from '../stores/NoteStore'
-// import Vue3DraggableResizable from 'vue3-draggable-resizable'
+    import { ref } from 'vue';
+    import { useNoteStore } from '../stores/NoteStore';
+    import { storeToRefs } from 'pinia';
+    import { db } from '@/firebase';
+    import { doc, getDoc } from 'firebase/firestore';
+    import { useRoute } from 'vue-router';
+
+    const route = useRoute()
+    const docRef = doc(db, 'blogs', route.params.id)
 
     const noteStore = useNoteStore()
     const { notes } = storeToRefs(noteStore)
+    noteStore.fetchNotes()
+
+    const blog = ref({})
+    const noteFromStore = ref([])
+    const noteWithCorrespondingTitle = ref([])
+    
+
+    
+    getDoc(docRef)
+    .then((doc) => {
+        blog.value = doc.data()
+        noteFromStore.value = notes.value
+        
+
+
+        noteFromStore.value.map((note) => {
+
+            if(note.blogTitle === blog.value.title) {
+                noteWithCorrespondingTitle.value.push(note)
+            }
+        })
+    })
+
+
+    
+
+
+    // import Vue3DraggableResizable from 'vue3-draggable-resizable'
     // const drag = ref({
     //     x: 100,
     //     y: 100,
@@ -31,12 +65,12 @@ import { useNoteStore } from '../stores/NoteStore'
     //     active: false
     // })
     
+
     const deleteNote = ((id) => {
         noteStore.deleteNote(id)
         noteStore.fetchNotes()
     })
 
-    noteStore.fetchNotes()
 </script>
 <style lang="scss" scoped>
 .all-notes {
