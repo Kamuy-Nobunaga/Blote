@@ -49,7 +49,7 @@ router.beforeEach(to => {
 
     if (to.fullPath === '/') return;
     
-    console.log(auth.currentUser);
+    // console.log(auth.currentUser);
 
     if(!auth.currentUser) {
       return '/'

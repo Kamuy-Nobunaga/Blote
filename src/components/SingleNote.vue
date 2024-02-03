@@ -3,6 +3,7 @@
         <div class="note" v-for="note in noteWithCorrespondingTitle" :key="note.id">
             <h5>{{ note.title }}</h5>
             <p>{{ note.note }}</p>
+            <p>{{ note.blogTitle }}</p>
 
             <button @click="deleteNote(note.id)">delete</button>
         </div>
@@ -26,7 +27,6 @@
 
     const route = useRoute()
     const docRef = doc(db, 'blogs', route.params.id)
-
     const noteStore = useNoteStore()
     const { notes } = storeToRefs(noteStore)
     noteStore.fetchNotes()
@@ -40,16 +40,13 @@
     getDoc(docRef)
     .then((doc) => {
         blog.value = doc.data()
+        
         noteFromStore.value = notes.value
+        noteWithCorrespondingTitle.value = noteFromStore.value.filter((note) => {
+            return note.blogTitle === blog.value.title
+        })
         
 
-
-        noteFromStore.value.map((note) => {
-
-            if(note.blogTitle === blog.value.title) {
-                noteWithCorrespondingTitle.value.push(note)
-            }
-        })
     })
 
 

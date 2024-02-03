@@ -48,7 +48,6 @@
             noteForm.note = "", 
             showAddNote.value = false
             noteStore.fetchNotes()
-            //don't fetch the notes with corresponding blog title
         })
     })
 

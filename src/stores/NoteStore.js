@@ -15,7 +15,7 @@ export const useNoteStore = defineStore('noteStore', {
             try {
                 const snapshot = await getDocs(notesRef);
                 this.notes = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-                console.log(snapshot.docs);
+                // console.log(snapshot.docs);
             } catch (error) {
                 console.log(error.message);
             }        
