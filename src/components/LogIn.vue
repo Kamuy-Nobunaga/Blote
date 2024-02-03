@@ -34,6 +34,9 @@
         .then((cred) => {
             console.log('user logged in:', cred.user);
             blogStore.isLogin = true;
+            // onAuthStateChanged(auth, (user) => {
+            // console.log('user status changed:', user);
+            // })
             router.push({ name: 'blotes' })
 
         })

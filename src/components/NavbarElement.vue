@@ -18,6 +18,9 @@
         .then(() => {
             console.log('the user signed out');
             blogStore.isLogin = false
+            // onAuthStateChanged(auth, (user) => {
+            // console.log('user status changed:', user);
+            // })
             router.push({ name: 'home' })
 
         })

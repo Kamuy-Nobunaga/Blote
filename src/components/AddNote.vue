@@ -11,10 +11,16 @@
 </template>
 <script setup>
     import { notesRef } from '@/firebase';
-    import { addDoc } from 'firebase/firestore';
+    import { addDoc, getDoc, doc } from 'firebase/firestore';
     import { reactive, ref } from 'vue';
     import { v4 as uuidv4 } from 'uuid';
     import { useNoteStore } from '../stores/NoteStore'
+    import { useRoute } from 'vue-router';
+    import { db } from '@/firebase';
+
+
+    const route = useRoute()
+    const docRef = doc(db, 'blogs', route.params.id)
 
     const noteStore = useNoteStore()
     const showAddNote = ref(false)
@@ -23,12 +29,18 @@
         note: '', 
         id: null
     })
-
+    const blog = ref([])
+    
+    getDoc(docRef)
+        .then((doc) => {
+            blog.value = doc.data()
+        })
 
     const addNote = (() => {
         addDoc(notesRef, {
             title: noteForm.title, 
             note: noteForm.note, 
+            blogTitle: blog.value.title,
             id: uuidv4()
         })
         .then(() => {
@@ -36,6 +48,7 @@
             noteForm.note = "", 
             showAddNote.value = false
             noteStore.fetchNotes()
+            //don't fetch the notes with corresponding blog title
         })
     })
 
