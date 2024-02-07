@@ -7,8 +7,7 @@
             <input type="password" name="password" id="password" v-model="account.password">
 
             <button>Log in</button>
-            <router-link :to="{ name: 
-            'sign up'}">Sign up</router-link>
+            <router-link :to="{ name: 'sign up'}">Sign up</router-link>
 
         </form>
     </div>
@@ -38,7 +37,6 @@
             // console.log('user status changed:', user);
             // })
             router.push({ name: 'blotes' })
-
         })
         .catch((err) => {
             console.log(err.message);
@@ -51,7 +49,7 @@
 <style lang="scss" scoped>
     .login {
         width: 50%;
-        height: 60vh;
+        height: 100vdh;
         margin: 5rem auto;
         background: var(--middle2);
         color: var(--lightest);

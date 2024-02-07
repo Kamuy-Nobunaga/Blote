@@ -10,7 +10,7 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/blotes',
+    path: '/all-blotes',
     name: 'blotes',
     component: () => import('../views/BlotesView.vue'),
   },

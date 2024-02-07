@@ -16,7 +16,7 @@ export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
 export const blogsRef = collection(db, 'blogs')
-export const notesRef = collection(db, `notes`)
+export const notesRef = collection(db, 'notes')
 
 
 

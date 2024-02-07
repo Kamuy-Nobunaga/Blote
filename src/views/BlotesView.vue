@@ -11,7 +11,7 @@
 
     const blogStore = useBlogStore()
     const { isLogin } = storeToRefs(blogStore)
-
+    blogStore.fetchBlogs
 
 </script>
 <style lang="scss" scoped>

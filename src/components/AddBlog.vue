@@ -13,8 +13,9 @@
   import { addDoc } from 'firebase/firestore';
   import { v4 as uuidv4 } from 'uuid';
   import { reactive } from 'vue';
+  import { useRouter } from 'vue-router';
 
-
+  const router = useRouter()
   const blogForm = reactive({
     title: '',
     content: '',
@@ -28,8 +29,9 @@
             id: uuidv4()
         })
         .then(() => {
-            blogForm.title = "", 
+            blogForm.title = "" 
             blogForm.content = "" 
+            router.push({name: 'blotes'})
         })
     })
 

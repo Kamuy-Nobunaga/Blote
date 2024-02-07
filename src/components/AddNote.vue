@@ -11,18 +11,20 @@
 </template>
 <script setup>
     import { notesRef } from '@/firebase';
-    import { addDoc, getDoc, doc } from 'firebase/firestore';
+    import { addDoc } from 'firebase/firestore';
     import { reactive, ref } from 'vue';
     import { v4 as uuidv4 } from 'uuid';
     import { useNoteStore } from '../stores/NoteStore'
-    import { useRoute } from 'vue-router';
-    import { db } from '@/firebase';
+    import { useBlogStore } from '../stores/BlogStore'
+    // import { useRoute } from 'vue-router';
+    // import { db } from '@/firebase';
 
 
-    const route = useRoute()
-    const docRef = doc(db, 'blogs', route.params.id)
+    // const route = useRoute()
+    // const docRef = doc(db, 'blogs', route.params.id)
 
     const noteStore = useNoteStore()
+    const blogStore = useBlogStore()
     const showAddNote = ref(false)
     const noteForm = reactive({
         title: '',
@@ -31,10 +33,11 @@
     })
     const blog = ref([])
     
-    getDoc(docRef)
-        .then((doc) => {
-            blog.value = doc.data()
-        })
+    const initBlogs = async () => {
+        const doc = await blogStore.fetchBlogs()
+        blog.value = doc
+    }
+    initBlogs()
 
     const addNote = (() => {
         addDoc(notesRef, {

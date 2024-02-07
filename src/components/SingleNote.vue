@@ -36,22 +36,17 @@
     const noteWithCorrespondingTitle = ref([])
     
 
-    
-    getDoc(docRef)
-    .then((doc) => {
+    const init = async () => {
+        await noteStore.fetchNotes()
+        const doc = await getDoc(docRef)
         blog.value = doc.data()
         
         noteFromStore.value = notes.value
         noteWithCorrespondingTitle.value = noteFromStore.value.filter((note) => {
             return note.blogTitle === blog.value.title
         })
-        
-
-    })
-
-
-    
-
+    }
+    init()
 
     // import Vue3DraggableResizable from 'vue3-draggable-resizable'
     // const drag = ref({

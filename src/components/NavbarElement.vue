@@ -1,6 +1,6 @@
 <template>
     <nav class='navbar'>
-        <router-link to="/blotes">Blotes</router-link>
+        <router-link :to="{ name: 'blotes' }">Blotes</router-link>
         <button @click="userSignout">Logout</button>
     </nav>
 </template>
