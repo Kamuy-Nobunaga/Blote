@@ -1,7 +1,7 @@
 <template>
     <div class="blog">
         <h1>{{ blog.title }} 
-            <router-link :to="{ name: 'blog-edit', params: { id: id}}" class="material-symbols-outlined">edit</router-link>
+            <router-link :to="{ name: 'blogEdit', params: { id: id}}" class="material-symbols-outlined">edit</router-link>
             <span @click="deleteBlog" class="material-symbols-outlined">delete_forever</span>
         </h1>
         <p>{{ blog.content }}</p>

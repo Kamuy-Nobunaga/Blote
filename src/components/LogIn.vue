@@ -32,7 +32,7 @@
     })
 
     const goToSignup = (() => {
-        router.push({ name: 'sign up'})
+        router.push({ name: 'signUp'})
     })
 
 
@@ -77,6 +77,7 @@
                 font-size: 1rem;
                 font-weight: bold;
                 box-shadow: 5px 5px 10px var(--darkest);
+                cursor: pointer;
             }
             > button[type='button'] {
                 color: var(--middle1);

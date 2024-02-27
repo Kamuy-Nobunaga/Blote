@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import { useBlogStore } from '@/stores/BlogStore';
+// import { useBlogStore } from '@/stores/BlogStore';
 // import { getAuth } from 'firebase/auth'
 
 const routes = [
@@ -16,12 +16,12 @@ const routes = [
   },
   {
     path: '/sign-up',
-    name: 'sign up',
+    name: 'signUp',
     component: () => import('../views/SignupPage.vue')
   },
   {
     path: '/add-blote',
-    name: 'add blote',
+    name: 'addBlote',
     component: () => import('../views/BloteAddView.vue')
   }, 
   {
@@ -31,7 +31,7 @@ const routes = [
   }, 
   {
     path: '/blog/:id/edit',
-    name: 'blog-edit',
+    name: 'blogEdit',
     component: () => import('../views/BlogEditView.vue')
   }, 
 ]
@@ -43,14 +43,23 @@ const router = createRouter({
 
 export default router
 
-router.beforeEach(to => {
-    if (to.fullPath === '/' || to.fullPath === '/sign-up') return;
-    const blogStore = useBlogStore()
-    blogStore.setLoginState()
-    if(!blogStore.username) {
-        console.log('go login!!');
-        return '/'
-    }
+// router.beforeEach(() => {
+//   const adminCheck = localStorage.getItem('admin')
+//     if (adminCheck) return;
+//     if(!adminCheck) {
+//         console.log('go login!!');
+//         return '/'
+//     }
+//to.fullPath === '/' || to.fullPath === '/sign-up'
+//   return true;
+// });
 
-  return true;
-});
+router.beforeEach(( to ) => {
+  const adminCheck = localStorage.getItem('user')
+  if (to.name === 'home' || to.name === 'signUp') return;
+  if (to.name !== 'home' && to.name !== 'signUp' && adminCheck) return;
+  if(!adminCheck) {
+    return ({ name: 'home'})
+  }
+  
+})
