@@ -6,8 +6,8 @@
             <label for="password" class="password">Password</label>
             <input type="password" name="password" id="password" v-model="account.password">
 
-            <button>Log in</button>
-            <router-link :to="{ name: 'sign up'}">Sign up</router-link>
+            <button type="submit">Log in</button>
+            <button type="button" @click="goToSignup">Sign up</button>
 
         </form>
     </div>
@@ -16,7 +16,6 @@
     import { reactive } from 'vue';
     // import { storeToRefs } from 'pinia';
     import { useBlogStore } from '@/stores/BlogStore';
-    import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
     import { useRouter } from 'vue-router';
 
     const router = useRouter()
@@ -26,22 +25,14 @@
         email: '', 
         password: ''
     })
-    const auth = getAuth()
 
     const signIn = (() => {
-        signInWithEmailAndPassword(auth, account.email, account.password)
-        .then((cred) => {
-            console.log('user logged in:', cred.user);
-            blogStore.isLogin = true;
-            // onAuthStateChanged(auth, (user) => {
-            // console.log('user status changed:', user);
-            // })
-            router.push({ name: 'blotes' })
-        })
-        .catch((err) => {
-            console.log(err.message);
-        })
+        blogStore.signIn(account)
+        router.push({ name: 'blotes' })
+    })
 
+    const goToSignup = (() => {
+        router.push({ name: 'sign up'})
     })
 
 
@@ -87,11 +78,12 @@
                 font-weight: bold;
                 box-shadow: 5px 5px 10px var(--darkest);
             }
-            > a {
-                text-decoration: none;
+            > button[type='button'] {
                 color: var(--middle1);
+                background: var(--dark);
+                box-shadow: none;
             }
-            > a:hover {
+            > button[type='button']:hover {
                 font-size: 1.5rem;
                 background: var(--lightest);
                 color: var(--light);

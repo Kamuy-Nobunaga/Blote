@@ -9,29 +9,25 @@
 
 </template>
 <script setup>
-    import { onMounted, ref } from 'vue';
-    import { doc, getDoc } from 'firebase/firestore';
-    import { db } from '@/firebase';
+    import { onMounted } from 'vue';
     import { useRoute, useRouter } from 'vue-router'; 
     import { useBlogStore } from '@/stores/BlogStore';
-    
+    import { storeToRefs } from 'pinia';
+
     const blogStore = useBlogStore()
     const route = useRoute()
     const router = useRouter()
-    const docRef = doc(db, 'blogs', route.params.id)
     const id = route.params.id
-    const blog = ref({})
-
+    const { blog } = storeToRefs(blogStore)
+    
     const deleteBlog = () => {
         blogStore.deleteBlog(id)
+        blogStore.fetchBlogs()
         router.push({ name: 'blotes'})
     }
 
     onMounted(() => {
-        getDoc(docRef)
-        .then((doc) => {
-            blog.value = doc.data()
-        })
+        blogStore.fetchBlog(id)
     })
 
 </script>

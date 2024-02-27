@@ -1,46 +1,32 @@
 <template>
     <form class="edit-blog" @submit.prevent="updateBlog">
         <label for="title">Title</label>
-        <input type="text" name="title" v-model="blogForm.title">
+        <input type="text" name="title" v-model="blog.title">
         <label for="content">Content</label>
-        <textarea name="context" id="context" cols="50" rows="30" v-model="blogForm.content"></textarea>
+        <textarea name="context" id="context" cols="50" rows="30" v-model="blog.content"></textarea>
 
         <button>Update</button>
     </form>
 </template>
 <script setup>
-    import { db } from '@/firebase';
-    import { doc, getDoc, updateDoc } from 'firebase/firestore';
-    import { reactive, ref } from 'vue';
+    import { onMounted } from 'vue';
     import { useRoute, useRouter } from 'vue-router';
+    import { useBlogStore } from '@/stores/BlogStore';
+    import { storeToRefs } from 'pinia';
+
 
     const route = useRoute()
     const router = useRouter()
-    const docRef = doc(db, 'blogs', route.params.id)
-    const blog = ref({})
-    const blogForm = reactive({
-        title: '',
-        content: '',
-    })
+    const blogStore = useBlogStore()
+    const { blog } = storeToRefs(blogStore)
 
-
-    getDoc(docRef)
-    .then((doc) => {
-        blog.value = doc.data()
-        blogForm.title = blog.value.title
-        blogForm.content = blog.value.content
-    })
-    
-
+    onMounted(() => {
+      blogStore.fetchBlog(route.params.id)
+    })    
     
     const updateBlog = (() => {
-        updateDoc(docRef, {
-            title: blogForm.title, 
-            content: blogForm.content, 
-        })
-        .then(() => {
-            router.push({ name: 'blog', params: { id: route.params.id } })
-        })
+      blogStore.updateBlog(route.params.id)
+      router.push({ name: 'blog', params: { id: route.params.id } })
     })
 
 

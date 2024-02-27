@@ -1,6 +1,6 @@
 <template>
     <button class="add-new-note" @click="toggleAddNote">add a note</button>
-    <form class="add-note" @submit.prevent="addNote" v-if="showAddNote">
+    <form class="add-note" @submit.prevent="addANote" v-if="showAddNote">
         <label for="title">Title</label>
         <input type="text" name="title" v-model="noteForm.title" required>
         <label for="note">note</label>
@@ -10,48 +10,28 @@
     </form>
 </template>
 <script setup>
-    import { notesRef } from '@/firebase';
-    import { addDoc } from 'firebase/firestore';
     import { reactive, ref } from 'vue';
-    import { v4 as uuidv4 } from 'uuid';
     import { useNoteStore } from '../stores/NoteStore'
-    import { useBlogStore } from '../stores/BlogStore'
-    // import { useRoute } from 'vue-router';
-    // import { db } from '@/firebase';
+    import { useRoute } from 'vue-router';
 
 
-    // const route = useRoute()
-    // const docRef = doc(db, 'blogs', route.params.id)
+    const route = useRoute()
 
     const noteStore = useNoteStore()
-    const blogStore = useBlogStore()
     const showAddNote = ref(false)
     const noteForm = reactive({
         title: '',
         note: '', 
         id: null
     })
-    const blog = ref([])
     
-    const initBlogs = async () => {
-        const doc = await blogStore.fetchBlogs()
-        blog.value = doc
-    }
-    initBlogs()
-
-    const addNote = (() => {
-        addDoc(notesRef, {
-            title: noteForm.title, 
-            note: noteForm.note, 
-            blogTitle: blog.value.title,
-            id: uuidv4()
-        })
-        .then(() => {
-            noteForm.title = "", 
-            noteForm.note = "", 
-            showAddNote.value = false
-            noteStore.fetchNotes()
-        })
+    const addANote = (() => {
+        noteStore.addNote(noteForm)
+        noteForm.title = "", 
+        noteForm.note = "", 
+        showAddNote.value = false
+        noteStore.fetchNotesWithCorrespondingTitle(route.params.id)
+        noteStore.fetchNotes()
     })
 
     const toggleAddNote = (() => {

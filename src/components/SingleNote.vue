@@ -1,6 +1,6 @@
 <template>
     <div class="all-notes">
-        <div class="note" v-for="note in noteWithCorrespondingTitle" :key="note.id">
+        <div class="note" v-for="note in noteStore.notesWithCorrespondingTitle" :key="note.id">
             <h5>{{ note.title }}</h5>
             <p>{{ note.note }}</p>
             <p>{{ note.blogTitle }}</p>
@@ -8,58 +8,24 @@
             <button @click="deleteNote(note.id)">delete</button>
         </div>
     </div>
-    <!-- <Vue3DraggableResizable 
-        :draggable="true"
-        v-model:x="drag.x"
-        v-model:y="drag.y"
-        v-model:w="drag.w"
-        v-model:h="drag.h"
-        v-model:active="active"
-    >Test</Vue3DraggableResizable> -->
 </template>
+
 <script setup>
-    import { ref } from 'vue';
+    import { onMounted } from 'vue';
     import { useNoteStore } from '../stores/NoteStore';
-    import { storeToRefs } from 'pinia';
-    import { db } from '@/firebase';
-    import { doc, getDoc } from 'firebase/firestore';
     import { useRoute } from 'vue-router';
 
     const route = useRoute()
-    const docRef = doc(db, 'blogs', route.params.id)
-    const noteStore = useNoteStore()
-    const { notes } = storeToRefs(noteStore)
-    noteStore.fetchNotes()
+    const noteStore = useNoteStore()    
 
-    const blog = ref({})
-    const noteFromStore = ref([])
-    const noteWithCorrespondingTitle = ref([])
-    
-
-    const init = async () => {
-        await noteStore.fetchNotes()
-        const doc = await getDoc(docRef)
-        blog.value = doc.data()
-        
-        noteFromStore.value = notes.value
-        noteWithCorrespondingTitle.value = noteFromStore.value.filter((note) => {
-            return note.blogTitle === blog.value.title
-        })
-    }
-    init()
-
-    // import Vue3DraggableResizable from 'vue3-draggable-resizable'
-    // const drag = ref({
-    //     x: 100,
-    //     y: 100,
-    //     h: 100,
-    //     w: 100,
-    //     active: false
-    // })
-    
+    onMounted(() => {
+        noteStore.fetchNotes()
+        noteStore.fetchNotesWithCorrespondingTitle(route.params.id)
+    })
 
     const deleteNote = ((id) => {
         noteStore.deleteNote(id)
+        noteStore.fetchNotesWithCorrespondingTitle(route.params.id)
         noteStore.fetchNotes()
     })
 

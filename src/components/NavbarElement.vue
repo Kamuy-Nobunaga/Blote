@@ -6,27 +6,14 @@
 </template>
 <script setup>
     import { useBlogStore } from '@/stores/BlogStore';
-    import { getAuth, signOut } from 'firebase/auth'
     import { useRouter } from 'vue-router';
 
     const router = useRouter()
-    const auth = getAuth()
     const blogStore = useBlogStore()
 
     const userSignout = (() => {
-        signOut(auth)
-        .then(() => {
-            console.log('the user signed out');
-            blogStore.isLogin = false
-            // onAuthStateChanged(auth, (user) => {
-            // console.log('user status changed:', user);
-            // })
-            router.push({ name: 'home' })
-
-        })
-        .catch((err) => {
-            console.log(err.message);
-        })
+        blogStore.userSignout()    
+        router.push({ name: 'home' })
     }) 
         
 

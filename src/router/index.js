@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-// import { useBlogStore } from '@/stores/BlogStore';
-import { getAuth } from 'firebase/auth'
+import { useBlogStore } from '@/stores/BlogStore';
+// import { getAuth } from 'firebase/auth'
 
 const routes = [
   {
@@ -44,19 +44,13 @@ const router = createRouter({
 export default router
 
 router.beforeEach(to => {
-    // const blogStore = useBlogStore()
-    const auth = getAuth()
-
-    if (to.fullPath === '/') return;
-    
-    // console.log(auth.currentUser);
-
-    if(!auth.currentUser) {
-      return '/'
+    if (to.fullPath === '/' || to.fullPath === '/sign-up') return;
+    const blogStore = useBlogStore()
+    blogStore.setLoginState()
+    if(!blogStore.username) {
+        console.log('go login!!');
+        return '/'
     }
 
-    // if (!blogStore.isLogin) {
-    //   return '/';
-    // }
   return true;
 });

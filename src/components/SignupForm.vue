@@ -13,27 +13,21 @@
 </template>
 <script setup>
     import { reactive } from 'vue';
-    import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
-import { useRouter } from 'vue-router';
+    import { useRouter } from 'vue-router';
+    import { useBlogStore } from '@/stores/BlogStore';
 
+    const blogStore = useBlogStore()
     const account = reactive({
         email: '', 
         password: ''
     })
-    const auth = getAuth()
     const router = useRouter()
 
     const signUp = (() => {
-        createUserWithEmailAndPassword(auth, account.email, account.password)
-        .then((cred) => {
-            console.log('user created:', cred.user);
-            account.email = ''
-            account.password = ''
-            router.push({ name: 'home'})
-        })
-        .catch((err) => {
-            console.log(err.message);
-        })
+        blogStore.userSignup(account)
+        account.email = ''
+        account.password = ''
+        router.push({ name: 'home'})
     })
 
 

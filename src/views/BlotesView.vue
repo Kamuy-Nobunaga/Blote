@@ -1,17 +1,16 @@
 <template>
     <div class="blotes-view">
         <BloteSnippet />
-        <button v-if="isLogin"><router-link to="/add-blote">Add blote</router-link></button>
+        <button v-if="blogStore.username"><router-link to="/add-blote">Add blote</router-link></button>
     </div>
 </template>
 <script setup>
     import BloteSnippet from '@/components/BloteSnippet.vue';
-    import { storeToRefs } from 'pinia';
     import { useBlogStore } from '@/stores/BlogStore';
 
     const blogStore = useBlogStore()
-    const { isLogin } = storeToRefs(blogStore)
-    blogStore.fetchBlogs
+    blogStore.fetchBlogs()
+    blogStore.setLoginState()
 
 </script>
 <style lang="scss" scoped>
